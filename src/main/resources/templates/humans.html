@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Список людей</title>
+  <link rel="stylesheet" th:href="@{/styles.css}" />
+</head>
+<body>
+
+<h1>Forbes</h1>
+
+<!-- Кнопка добавления нового человека -->
+<a href="/humans/new">
+  <button>Добавить человека</button>
+</a>
+
+<form th:action="@{/humans/by-area}" method="get">
+  <label for="areas">Сферы деятельности:</label>
+  <select id="areas" multiple th:name="areaIds">
+    <option th:each="area : ${areas}" th:value="${area.id}" th:text="${area.name}"></option>
+  </select>
+  <button type="submit">Показать</button>
+</form>
+
+<table>
+  <thead>
+  <tr>
+    <th>Место</th>
+    <th>Имя</th>
+    <th>Капитал</th>
+    <th>Сферы деятельности</th>
+    <th>Действия</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="human : ${humans}">
+    <td th:text="${human.id}"></td>
+    <td th:text="${human.name}"></td>
+    <td th:text="${human.capital}"></td>
+    <td>
+      <span th:each="area, iterStat : ${human.areas}">
+        <span th:text="${area.name}"></span>
+        <span th:if="${!iterStat.last}">, </span>
+      </span>
+    </td>
+    <td>
+      <a th:href="@{/humans/edit/{id}(id=${human.id})}">Редактировать</a> |
+      <a th:href="@{/humans/delete/{id}(id=${human.id})}" onclick="return confirm('Удалить?');">
+        Удалить
+      </a>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+</body>
+</html>
